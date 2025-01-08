@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrello Acquisti</title>
+</head>
+<body>
+    <h1>Carrello Acquisti</h1>
+
+    <!-- Lista prodotti -->
+    <h2>Prodotti disponibili</h2>
+    <ul>
+        <li>Prodotto 1 - €10 <button onclick="addToCart('Prodotto 1', 10)">Aggiungi al carrello</button></li>
+        <li>Prodotto 2 - €20 <button onclick="addToCart('Prodotto 2', 20)">Aggiungi al carrello</button></li>
+        <li>Prodotto 3 - €15 <button onclick="addToCart('Prodotto 3', 15)">Aggiungi al carrello</button></li>
+    </ul>
+
+    <!-- Sezione carrello -->
+    <h2>Carrello</h2>
+    <ul id="cartList"></ul>
+    <p id="totalPrice">Totale: €0</p>
+
+    <!-- Pulsante per svuotare il carrello -->
+    <button onclick="clearCart()">Svuota carrello</button>
+
+    <script>
+        // Array per memorizzare gli articoli del carrello
+        let cart = [];
+        let total = 0;
+
+        // Funzione per aggiungere un prodotto al carrello
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            total += price;
+            updateCart();
+        }
+
+        // Funzione per aggiornare la visualizzazione del carrello
+        function updateCart() {
+            const cartList = document.getElementById('cartList');
+            const totalPrice = document.getElementById('totalPrice');
+
+            // Pulisce la lista del carrello
+            cartList.innerHTML = '';
+
+            // Aggiunge ogni prodotto del carrello come elemento della lista
+            cart.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.product} - €${item.price}`;
+
+                // Aggiunge il pulsante "Rimuovi" accanto a ogni prodotto
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Rimuovi';
+                removeButton.style.marginLeft = '10px';
+                removeButton.onclick = () => removeFromCart(index);
+
+                li.appendChild(removeButton);
+                cartList.appendChild(li);
+            });
+
+            // Aggiorna il prezzo totale
+            totalPrice.textContent = `Totale: €${total}`;
+        }
+
+        // Funzione per rimuovere un prodotto dal carrello
+        function removeFromCart(index) {
+            total -= cart[index].price; // Sottrae il prezzo dal totale
+            cart.splice(index, 1); // Rimuove l'elemento dall'array
+            updateCart(); // Aggiorna il carrello
+        }
+
+        // Funzione per svuotare il carrello
+        function clearCart() {
+            cart = [];
+            total = 0;
+            updateCart();
+        }
+    </script>
+</body>
+</html>
